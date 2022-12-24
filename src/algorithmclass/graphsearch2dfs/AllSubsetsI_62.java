@@ -3,7 +3,7 @@ package algorithmclass.graphsearch2dfs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllSubsets2_62 {
+public class AllSubsetsI_62 {
     // method 1: recommended DFS solution.
     public List<String> subSets(String set) {
         List<String> result = new ArrayList<>();
@@ -36,5 +36,26 @@ public class AllSubsets2_62 {
         sb.deleteCharAt(sb.length() - 1);
     }
 
+    // method 2: another DFS solution (not recommended).
+    public List<String> subSetsII(String set) {
+        List<String> result = new ArrayList<String>();
+        if (set == null) {
+            return result;
+        }
+        char[] arraySet = set.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        helperII(arraySet, sb, 0, result);
+        return result;
+    }
 
+    private void helperII(char[] set, StringBuilder sb, int index, List<String> result) {
+        result.add(sb.toString());
+        // maintains ascending order of the indices of picked characters.
+        // choose the next picked index(the smallest one can be picked is index).
+        for (int i = index; i < set.length; i++) {
+            sb.append(set[i]);
+            helperII(set, sb, i + 1, result);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
 }
