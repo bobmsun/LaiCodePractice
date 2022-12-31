@@ -3,76 +3,77 @@ import utility.*;
 
 public class Playground {
 
-    private Deque<Integer> first;
-    private Deque<Integer> last;
-    private Deque<Integer> buffer;
-
-    public Playground() {
-        // Write your solution here.
-        first = new ArrayDeque<>();
-        last = new ArrayDeque<>();
-        buffer = new ArrayDeque<>();
-    }
-
-    public void offerFirst(int element) {
-        first.offerFirst(element);
-    }
-
-    public void offerLast(int element) {
-        last.offerFirst(element);
-    }
-
-    public Integer pollFirst() {
-        shuffleIfNeeded(last, first);     // move numbers from last to first if needed
-        return first.pollFirst();
-    }
-
-    public Integer pollLast() {
-        shuffleIfNeeded(first, last);
-        return last.pollFirst();
-    }
-
-    public Integer peekFirst() {
-        Integer result = pollFirst();
-        if (result == null) {
-            return null;
+    public int[] kSmallest(int[] array, int k) {
+        // Write your solution here
+        if (array.length == 0 || k == 0) {
+            return new int[0];
         }
-        first.offerFirst(result);
-        return result;
+        findKSmallestIndex(array, k, 0, array.length - 1);
+        int[] kSmallest = Arrays.copyOfRange(array, 0, k);
+        Arrays.sort(kSmallest);
+        return kSmallest;
     }
 
-    public Integer peekLast() {
-        Integer result = pollLast();
-        if (result == null) {
-            return null;
+    private int findKSmallestIndex(int[] array, int k, int start, int end) {
+        System.out.println("start: " + start);
+        System.out.println("k: " + k);
+        if (start == end) {
+            return start;
         }
-        last.offerFirst(result);
-        return result;
+        int randomPivotIndex = start + (int)(Math.random() * (end - start + 1));
+        int pivot = array[randomPivotIndex];
+        swap(array, randomPivotIndex, end);
+        int i = start;
+        int j = end - 1;
+        while (i <= j) {
+            if (array[i] < pivot) {
+                i++;
+            } else if (array[j] >= pivot) {
+                j--;
+            } else {
+                swap(array, i, j);
+                i++;
+                j--;
+            }
+        }
+        swap(array, i, end);
+        if (i - start + 1 == k) {
+            return i;
+        } else if (i - start + 1 > k) {
+            return findKSmallestIndex(array, k, start, i - 1);
+        } else {
+            return findKSmallestIndex(array, k - i - 1, i + 1, end);
+        }
     }
 
-    public int size() {
-        return first.size() + last.size();
-    }
-
-    public boolean isEmpty() {
-        return first.isEmpty() && last.isEmpty();
-    }
-
-    private void shuffleIfNeeded(Deque<Integer> from, Deque<Integer> to) {
-        int size = from.size();
-        for (int i = 0; i < size / 2; i++) {
-            buffer.offerFirst(from.pollFirst());
-        }
-        while (!from.isEmpty()) {
-            to.offerFirst(from.pollFirst());
-        }
-        while (!buffer.isEmpty()) {
-            from.offerFirst(buffer.pollFirst());
-        }
+    private void swap(int[] array, int a, int b) {
+        int tmp = array[a];
+        array[a] = array[b];
+        array[b] = tmp;
     }
 
     public static void main(String[] args) {
-        Playground sol = new Playground();
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("a");
+    //    for (int i = 0; i < list.size(); i++) {
+    //        if (list.get(i).equals("a")) {
+    //    list.remove(i);
+    //        }
+    //    }
+        System.out.println(list);
 
+        for (String str : list) {
+            if (str.equals("a")) {
+                str = "haha";
+            }
+        }
+
+        System.out.println(list);
+
+        Integer[] arr = {1, 2, 3, 4};
+        Arrays.sort(arr, Collections.reverseOrder());
+        System.out.println(Arrays.toString(arr));    // [4, 3, 2, 1]
     }
 }
