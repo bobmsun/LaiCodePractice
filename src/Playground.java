@@ -53,27 +53,8 @@ public class Playground {
     }
 
     public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("a");
-        list.add("b");
-        list.add("a");
-    //    for (int i = 0; i < list.size(); i++) {
-    //        if (list.get(i).equals("a")) {
-    //    list.remove(i);
-    //        }
-    //    }
-        System.out.println(list);
+        char[] arr = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+        System.out.println(new String(arr, 2, 3));    // cde
 
-        for (String str : list) {
-            if (str.equals("a")) {
-                str = "haha";
-            }
-        }
-
-        System.out.println(list);
-
-        Integer[] arr = {1, 2, 3, 4};
-        Arrays.sort(arr, Collections.reverseOrder());
-        System.out.println(Arrays.toString(arr));    // [4, 3, 2, 1]
     }
 }
