@@ -3,48 +3,45 @@ import utility.*;
 
 public class Playground {
 
-    public boolean match(String input, String pattern) {
+    public List<Integer> postOrder(TreeNode root) {
         // Write your solution here
-        // corner case
-
-        int curInput = 0;
-        for (int curPattern = 0; curPattern < pattern.length(); curPattern++) {
-
-            // if pattern is letter
-            if (pattern.charAt(curPattern) >= 'a' && pattern.charAt(curPattern) <= 'z') {
-                if (curInput >= input.length() || pattern.charAt(curPattern) != input.charAt(curInput)) {
-                    return false;
-                }
-                curInput++;
-                curPattern++;
-            } else {
-                // if pattern is number
-
-                // read out the number
-                int num = pattern.charAt(curPattern) - '0';
-                while (curPattern + 1 < pattern.length() && (pattern.charAt(curPattern + 1) < 'a' || pattern.charAt(curPattern + 1) > 'z')) {
-                    num *= 10;
-                    num += (pattern.charAt(curPattern + 1) - '0');
-                    curPattern++;
-                }
-
-                if (curInput + num > input.length()) {
-                    return false;
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.offerFirst(root);
+        TreeNode pre = null;
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pollFirst();
+            if (pre == null || pre.left == cur || pre.right == cur) {
+                if (cur.left == null && cur.right == null) {
+                    result.add(cur.key);
+                    stack.pollFirst();
+                } else if (cur.left == null) {
+                    stack.offerFirst(cur.right);
                 } else {
-                    curInput += num;
+                    stack.offerFirst(cur.left);
                 }
+            } else if (cur.left == pre) {
+                if (cur.right == null) {
+                    result.add(cur.key);
+                    stack.pollFirst();
+                } else {
+                    stack.offerFirst(cur.right);
+                }
+            } else {
+                result.add(cur.key);
+                stack.pollFirst();
             }
+            pre = cur;
         }
-
-        if (curInput == input.length()) {
-            return true;
-        } else {
-            return false;
-        }
+        return result;
     }
 
     public static void main(String[] args) {
         Playground sol = new Playground();
-        System.out.println(sol.match("sophisticated", "s111d"));
+        TreeNode root = TreeNode.fromLevelOrderSpecialOldVersion(new String[]{"12","#","-3","-4","-14","-5","#","16"});
+        sol.postOrder(root);
     }
 }
