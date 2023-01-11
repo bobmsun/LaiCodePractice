@@ -3,6 +3,44 @@ import utility.*;
 
 public class Playground {
 
+    public boolean match(String input, String pattern) {
+        // Write your solution here
+        if (pattern.isEmpty()) {
+            if (input.isEmpty()) {
+                return true;
+            }
+            return false;
+        }
+        char[] inputArr = input.toCharArray();
+        char[] patternArr = pattern.toCharArray();
+        int inputIndex = 0;
+        int patternIndex = 0;
+        while (inputIndex < inputArr.length && patternIndex < patternArr.length) {
+            if (patternArr[patternIndex] >= 'a' && patternArr[patternIndex] <= 'z') {
+                if (inputArr[inputIndex] == patternArr[patternIndex]) {
+                    inputIndex++;
+                    patternIndex++;
+                } else {
+                    return false;
+                }
+            } else {
+                int num = 0;
+                while (patternIndex < patternArr.length && patternArr[patternIndex] >= '0' && patternArr[patternIndex] <= '9') {
+                    num += 10 * num + (patternArr[patternIndex] - '0');
+                    patternIndex++;
+                }
+                inputIndex += num;
+                if (inputIndex > inputArr.length) {
+                    return false;
+                }
+            }
+        }
+        if (patternIndex < patternArr.length || inputIndex < inputArr.length) {
+            return false;
+        }
+        return true;
+    }
+
     public List<Integer> postOrder(TreeNode root) {
         // Write your solution here
         List<Integer> result = new ArrayList<>();
@@ -41,7 +79,8 @@ public class Playground {
 
     public static void main(String[] args) {
         Playground sol = new Playground();
-        TreeNode root = TreeNode.fromLevelOrderSpecialOldVersion(new String[]{"12","#","-3","-4","-14","-5","#","16"});
-        sol.postOrder(root);
+        // TreeNode root = TreeNode.fromLevelOrderSpecialOldVersion(new String[]{"12","#","-3","-4","-14","-5","#","16"});
+        //sol.postOrder(root);
+        sol.match("laioffercom", "l10");
     }
 }
